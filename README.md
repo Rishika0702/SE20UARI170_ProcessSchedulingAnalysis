@@ -1,13 +1,18 @@
 # SE20UARI170 - ProcessSchedulingAnalysis
 ## AVERAGE WAITING TIME AND AVERAGE TURNAROUND TIME FOR EACH ALGORITHMS
 
-### FIRST COME FIRST SERVE
-![image](https://github.com/Rishika0702/ProcessSchedulingAnalysis/assets/73593792/1d5830ea-d471-4a11-8d4d-a8f75c672ba3)
-### SHORTEST JOB FIRST
-![image](https://github.com/Rishika0702/ProcessSchedulingAnalysis/assets/73593792/b59b751a-424b-4802-871d-92cedc8322c0)
-### ROUND ROBIN
-![image](https://github.com/Rishika0702/ProcessSchedulingAnalysis/assets/73593792/14580894-3bcd-4d5c-96e7-f4266c644c19)
-### PRIORITY
-![image](https://github.com/Rishika0702/ProcessSchedulingAnalysis/assets/73593792/739c848e-204d-4d53-80e3-db4e8ed4484a)
+### PRIORITY SCHEDULING
+![image](https://github.com/Rishika0702/SE20UARI170_ProcessSchedulingAnalysis/assets/73593792/67a70613-d408-4202-b8e9-8783d3dbe68a)
+
+### FIRST COME FIRST SERVE SCHEDULING
+![image](https://github.com/Rishika0702/SE20UARI170_ProcessSchedulingAnalysis/assets/73593792/7604377e-0ebe-4d85-85ef-68cebb28d665)
+
+
+### SHORTEST JOB FIRST SCHEDULING
+![image](https://github.com/Rishika0702/SE20UARI170_ProcessSchedulingAnalysis/assets/73593792/54e101e0-a0e3-4d80-a4d5-d8c0a96f964f)
+
+### ROUND ROBIN SCHEDULING
+![image](https://github.com/Rishika0702/SE20UARI170_ProcessSchedulingAnalysis/assets/73593792/a6c37855-3ec6-4c52-a6d8-7b79cab87c82)
+
 
 ACCORDING TO THE ABOVE OUTPUTS OF AVERAGE WAITING TIME AND AVERAGE TURNAROUND TIME ROUND ROBIN IS MOST SUITABLE ALGORITHM AS IT IS HAVING LESS WAITING TIME.
