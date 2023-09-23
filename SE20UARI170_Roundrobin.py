@@ -86,11 +86,26 @@ def main():
 
     avg_turnaround_time = total_turnaround_time / n
     avg_waiting_time = total_waiting_time / n
-    
+    avg_response_time = total_response_time / n
+    cpu_utilization = ((processes[n - 1].completion_time - total_idle_time) / processes[n - 1].completion_time) * 100
+    throughput = n / (processes[n - 1].completion_time - processes[0].arrival_time)
+
+    processes.sort(key=lambda p: p.pid)
+
+    print("\n#P\tAT\tBT\tST\tCT\tTAT\tWT\tRT\n")
+    for i in range(n):
+        print(
+            f"{processes[i].pid}\t{processes[i].arrival_time}\t{processes[i].burst_time}\t"
+            f"{processes[i].start_time}\t{processes[i].completion_time}\t{processes[i].turnaround_time}\t"
+            f"{processes[i].waiting_time}\t{processes[i].response_time}\n"
+        )
 
     print(f"Average Turnaround Time = {avg_turnaround_time}")
     print(f"Average Waiting Time = {avg_waiting_time}")
-    
+    print(f"Average Response Time = {avg_response_time}")
+    print(f"CPU Utilization = {cpu_utilization}%")
+    print(f"Throughput = {throughput} process/unit time")
+
 
 if __name__ == "__main__":
     main()
