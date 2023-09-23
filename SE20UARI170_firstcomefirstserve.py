@@ -9,85 +9,66 @@ class Process:
         self.waiting_time = 0
         self.response_time = 0
 
-
-def main():
-    n = int(input("Enter the number of processes: "))
-
-    processes = []
-    for i in range(n):
-        arrival_time = int(input(f"Enter arrival time of process {i + 1}: "))
-        burst_time = int(input(f"Enter burst time of process {i + 1}: "))
-        processes.append(Process(i + 1, arrival_time, burst_time))
-
+def calculate_metrics(processes):
     total_turnaround_time = 0
     total_waiting_time = 0
-    total_response_time = 0
-    total_idle_time = 0
-    is_completed = [False] * n
 
-    current_time = 0
-    completed = 0
-    prev = 0
-
-    while completed != n:
-        idx = -1
-        mn = float("inf")
-        for i in range(n):
-            if processes[i].arrival_time <= current_time and not is_completed[i]:
-                if processes[i].burst_time < mn:
-                    mn = processes[i].burst_time
-                    idx = i
-                if processes[i].burst_time == mn:
-                    if processes[i].arrival_time < processes[idx].arrival_time:
-                        mn = processes[i].burst_time
-                        idx = i
-
-        if idx != -1:
-            processes[idx].start_time = current_time
-            processes[idx].completion_time = processes[idx].start_time + processes[idx].burst_time
-            processes[idx].turnaround_time = processes[idx].completion_time - processes[idx].arrival_time
-            processes[idx].waiting_time = processes[idx].turnaround_time - processes[idx].burst_time
-            processes[idx].response_time = processes[idx].start_time - processes[idx].arrival_time
-
-            total_turnaround_time += processes[idx].turnaround_time
-            total_waiting_time += processes[idx].waiting_time
-            total_response_time += processes[idx].response_time
-            total_idle_time += processes[idx].start_time - prev
-
-            is_completed[idx] = True
-            completed += 1
-            current_time = processes[idx].completion_time
-            prev = current_time
-        else:
-            current_time += 1
-
-    min_arrival_time = float("inf")
-    max_completion_time = -1
+    n = len(processes)
 
     for i in range(n):
-        min_arrival_time = min(min_arrival_time, processes[i].arrival_time)
-        max_completion_time = max(max_completion_time, processes[i].completion_time)
+        processes[i].waiting_time = processes[i].turnaround_time - processes[i].burst_time
+        total_turnaround_time += processes[i].turnaround_time
+        total_waiting_time += processes[i].waiting_time
 
     avg_turnaround_time = total_turnaround_time / n
     avg_waiting_time = total_waiting_time / n
-    avg_response_time = total_response_time / n
-    cpu_utilization = ((max_completion_time - total_idle_time) / max_completion_time) * 100
-    throughput = n / (max_completion_time - min_arrival_time)
 
-    print("\n#P\tAT\tBT\tST\tCT\tTAT\tWT\tRT\n")
+    return avg_turnaround_time, avg_waiting_time
+
+def main():
+    # Define arrival_times and burst_times
+    arrival_times = [0, 4, 5, 6]
+    burst_times = [24, 3, 3, 12]
+
+    processes = []
+    n = len(arrival_times)
+
     for i in range(n):
-        print(
-            f"{processes[i].pid}\t{processes[i].arrival_time}\t{processes[i].burst_time}\t"
-            f"{processes[i].start_time}\t{processes[i].completion_time}\t{processes[i].turnaround_time}\t"
-            f"{processes[i].waiting_time}\t{processes[i].response_time}\n"
-        )
+        processes.append(Process("P" + str(i + 1), arrival_times[i], burst_times[i]))
 
-    print(f"Average Turnaround Time = {avg_turnaround_time}")
+    processes.sort(key=lambda x: x.arrival_time)
+
+    for i in range(n):
+        processes[i].start_time = max(processes[i - 1].completion_time if i > 0 else 0, processes[i].arrival_time)
+        processes[i].completion_time = processes[i].start_time + processes[i].burst_time
+        processes[i].turnaround_time = processes[i].completion_time - processes[i].arrival_time
+        processes[i].response_time = processes[i].start_time - processes[i].arrival_time
+
+    # Calculate metrics
+    avg_turnaround_time, avg_waiting_time = calculate_metrics(processes)
+
+    # Calculate average response time
+    total_response_time = sum(process.response_time for process in processes)
+    avg_response_time = total_response_time / n
+
+    # Calculate CPU Utilization
+    total_execution_time = processes[-1].completion_time  # Completion time of the last process
+    total_idle_time = total_execution_time - sum(process.burst_time for process in processes)
+    cpu_utilization = (total_execution_time - total_idle_time) / total_execution_time * 100
+
+    # Calculate Throughput
+    throughput = n / total_execution_time
+
+    # Print processes and metrics
+    print("#P\tAT\tBT\tST\tCT\tTAT\tWT\tRT")
+    for process in processes:
+        print(f"{process.pid}\t{process.arrival_time}\t{process.burst_time}\t{process.start_time}\t{process.completion_time}\t{process.turnaround_time}\t{process.waiting_time}\t{process.response_time}")
+
+    print(f"\nAverage Turnaround Time = {avg_turnaround_time}")
     print(f"Average Waiting Time = {avg_waiting_time}")
     print(f"Average Response Time = {avg_response_time}")
-    print(f"CPU Utilization = {cpu_utilization}%")
-    print(f"Throughput = {throughput} process/unit time")
-
+    print(f"CPU Utilization = {cpu_utilization:.2f}%")
+    print(f"Throughput = {throughput:.2f} process/unit time")
 
 if __name__ == "__main__":
     main()
